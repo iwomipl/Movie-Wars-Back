@@ -1,21 +1,27 @@
-import express, {json, urlencoded} from 'express';
+import express, {urlencoded} from 'express';
 import cors from 'cors';
 import 'express-async-errors';
 import {config} from "./config/config";
 import {routes} from "./routers/routes";
+import { handleError, handleFourOhFourError } from './utils/errors';
 
 const app = express();
 
 app.use(cors({
-    origin: ['http://localhost:3001'],
+    origin: ['http://localhost:3000'],
 }));
-app.use(json());
+app.use(express.json());
 app.use(urlencoded({
     extended: true,
 }));
 
 //Routers
-app.use(routes)
+app.use(routes);
+
+//errors
+app.use(handleError);
+//404 error
+app.use(handleFourOhFourError);
 
 app.listen(config.servPort, config.servHost, ()=>{
     console.log(`Listening on http://${config.servHost}:${config.servPort}`);
