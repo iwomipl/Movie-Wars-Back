@@ -2,7 +2,7 @@ import {Router} from 'express';
 import {topMovies} from "../utils/topMovies";
 import {fetchFunction} from "../utils/fetchFunction";
 import {MoviesFromOMDBAPI} from "../types";
-import {TopMovie} from "../records/topMoviesRecord";
+import {TopMovie} from "../records/topMovies.record";
 import {appendFile} from "fs/promises";
 
 export const updateDataBaseRouter = Router();
@@ -12,8 +12,9 @@ updateDataBaseRouter
         const data = await Promise.all(topMovies.map(async (movie) => {
             await setTimeout(async () => {
                 const {position, origTitle, polTitle, year, imgOfMovie} = movie;
-                let movieFromOMDB = await fetchFunction('GET', `${encodeURIComponent(movie.origTitle)}`, `${movie.year}`) as unknown as MoviesFromOMDBAPI;
-                movieFromOMDB = movieFromOMDB !== null ? movieFromOMDB : await fetchFunction('GET', `${encodeURIComponent(movie.polTitle)}`, `${movie.year}`) as unknown as MoviesFromOMDBAPI;
+                let movieFromOMDB = await fetchFunction('GET', `${encodeURIComponent(movie.origTitle || movie.polTitle)}`, `${movie.year}`) as unknown as MoviesFromOMDBAPI;
+
+                // movieFromOMDB = movieFromOMDB !== null ? movieFromOMDB : await fetchFunction('GET', `${encodeURIComponent(movie.polTitle)}`, `${movie.year}`) as unknown as MoviesFromOMDBAPI;
 
                 if (movieFromOMDB !== null ) {
                     const {
@@ -43,7 +44,12 @@ updateDataBaseRouter
                     return await newMovie.addNewMovieToDataBase();
                 }
 
-            await appendFile(__dirname+'/../utils/badMovies.ts',`could not add movie: ${(movie.origTitle || 'no orig title')}, ${movie.polTitle || 'nie ma polskiego tytułu'}\n`, 'utf-8')
+            await appendFile(__dirname+'/../utils/badMovies.txt',
+                `could not add movie:\n
+                ${(movie.origTitle || 'no orig title')}\n\n 
+                Polish title: \n
+                ${movie.polTitle || 'nie ma polskiego tytułu'}\n
+            ******-----------------------******\n\n`, 'utf-8')
             }, Math.random() * 15000);
         }))
 
