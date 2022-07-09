@@ -1,13 +1,12 @@
 import {Router} from 'express';
-import {topMovies} from "../utils/topMovies";
+import {MovieResponseToFront} from "../records/movieResponseToFront.record";
 
 export const listOfMoviesRouter = Router();
 
 listOfMoviesRouter
     .post('/', async (req, res) => {
         const {number} = req.body;
-        const arrayOfChosenNumberOfMovies = topMovies.filter(movie => movie.position <= number);
-        const shuffledArray = arrayOfChosenNumberOfMovies.sort(()=> Math.random() - 0.5);
+        const movieFromMyDB = await MovieResponseToFront.getMoviesFromDataBaseAndShuffle(number);
 
-        res.status(200).json(shuffledArray);
+        res.status(200).json(movieFromMyDB);
     })

@@ -100,5 +100,4 @@ export class TopMovie implements MoviesInDataBase {
         return this.origTitle;
     }
 
-
 }
