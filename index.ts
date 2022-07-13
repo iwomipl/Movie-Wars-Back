@@ -8,7 +8,7 @@ import { handleError, handleFourOhFourError } from './utils/errors';
 const app = express();
 
 app.use(cors({
-    origin: ['http://localhost:3000'],
+    origin: [config.corsOrigin],
 }));
 app.use(express.json());
 app.use(urlencoded({
