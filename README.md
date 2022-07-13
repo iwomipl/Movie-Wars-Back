@@ -4,6 +4,9 @@ Here you can wind app on which you can see what is your favourite movie. After i
 # Tech stack
 Backend is built on Express. It communicates with frontend via API. This app also communicates with OMDB API, to get information abut movies. To get updated list of Movies I created Browser snippet, so it can be easily updated if needed. 500 movies is enough to choose from, so update is not first choice feature for the app.    
 
+#----------------WORKING DEMO ------------- Until end of August ----------------
+##[MOVIE WARS](https://iwomi.networkmanager.pl/)
+
 # Installing app
 * You need to get all files and from github
 * Before running you need to prepare DataBase to be useful. You can use either Empty structure, or filled db with movies, second choice will let you escape need to create account on OMDB API. Files are named **DBstructure.sql** and **DBstuctureAndData.sql** and are in main folder of app.
