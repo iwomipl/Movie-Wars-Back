@@ -28,6 +28,9 @@ I might also create a replit working app. The link will be here. Until then, you
 
 ##[Backend](https://github.com/iwomipl/Movie-Wars-Back)
 
+#Browser Snippet
+
+
 #Planned updates
 I want to add another features to frontend app, so backend would have to deal with it, those are:
 * choosing from movies of one director
@@ -36,3 +39,4 @@ I want to add another features to frontend app, so backend would have to deal wi
 * choosing from movies of one genre
 * choosing from movies of one rating 
 * winning movie screen will show similar movies to the winning one by director or by genre
+
