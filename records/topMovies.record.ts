@@ -70,19 +70,25 @@ export class TopMovie implements MoviesInDataBase {
         this.director = director;
     }
 
-    async checkIfItIsInDataBase(): Promise<boolean> {
-        const [results] = await pool.execute('SELECT `id` FROM `top-movies` WHERE `year`=:year AND (`origTitle`=:origTitle OR `polTitle`=:polTitle OR `origTitle`=:polTitle)', {
-            year: this.year,
-            origTitle: this.origTitle,
-            polTitle: this.polTitle,
+    static async checkIfItIsInDataBase(year: Date, origTitle: string, polTitle: string): Promise<TopMovie> {
+        const [[results]] = await pool.execute('SELECT * FROM `top-movies` WHERE `year`=:year AND (`origTitle`=:origTitle OR `polTitle`=:polTitle OR `origTitle`=:polTitle)', {
+            year,
+            origTitle,
+            polTitle,
         }) as TopMovieResults;
-        return results.length !== 0;
+
+        return results as TopMovie;
+    }
+
+    static async updateMoviePosition(id: string, position: number, origTitle: string): Promise<string> {
+        const [results] = await pool.execute('UPDATE `top-movies` SET `position` = :position WHERE `id` = :id', {
+            position,
+            id,
+        });
+        return origTitle;
     }
 
     async addNewMovieToDataBase(): Promise<string> {
-        if (await this.checkIfItIsInDataBase()) {
-            return;
-        }
         const [results] = await pool.execute('INSERT INTO `top-movies` VALUES(:id, :origTitle, :polTitle, :position, :year, :imgOfMovie, :genre, :poster, :actors, :plot, :rated, :director)', {
             id: this.id,
             origTitle: this.origTitle,
@@ -99,5 +105,4 @@ export class TopMovie implements MoviesInDataBase {
         });
         return this.origTitle;
     }
-
 }

@@ -61,6 +61,14 @@ updateDataBaseRouter
       const topMovies: TopMoviesInterface[] = req.body;
       const data = (await Promise.all(topMovies.map(async (movie) => {
           const {position, origTitle, polTitle, year, imgOfMovie} = movie;
+          const movieFromDB = year && (origTitle || polTitle) ? await TopMovie.checkIfItIsInDataBase(new Date(year), origTitle, polTitle): null;
+          if(movieFromDB){
+                return movieFromDB.position !== Number(position) ?
+                  await TopMovie.updateMoviePosition(movieFromDB.id, Number(position), movieFromDB.origTitle) :
+                  origTitle;
+          } else {
+
+
           let movieFromOMDB = (await fetchFunction('GET', `${encodeURIComponent(movie.origTitle || movie.polTitle)}`, `${movie.year}`) as unknown as MoviesFromOMDBAPI);
 
           // movieFromOMDB = movieFromOMDB !== null ? movieFromOMDB : await fetchFunction('GET', `${encodeURIComponent(movie.polTitle)}`, `${movie.year}`) as unknown as MoviesFromOMDBAPI;
@@ -94,6 +102,7 @@ updateDataBaseRouter
                 ${movie.polTitle || 'nie ma polskiego tytułu'}\n
             ******-----------------------******\n\n`, 'utf-8');
           return;
+          }
       }))).filter(movieTitle => movieTitle);
 
   })
