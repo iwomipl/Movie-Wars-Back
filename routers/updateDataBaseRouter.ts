@@ -9,7 +9,7 @@ export const updateDataBaseRouter = Router();
 
 updateDataBaseRouter
     .get('/updateMovies', async (req, res) => {
-        const data = await Promise.all(topMoviesFromFile.map(async (movie) => {
+        await Promise.all(topMoviesFromFile.map(async (movie) => {
             await setTimeout(async () => {
                 const {position, origTitle, polTitle, year, imgOfMovie} = movie;
                 let movieFromOMDB = await fetchFunction('GET', `${encodeURIComponent(movie.origTitle || movie.polTitle)}`, `${movie.year}`) as unknown as MoviesFromOMDBAPI;
@@ -59,7 +59,7 @@ updateDataBaseRouter
     })
     .post('/', async (req, res) => {
       const topMovies: TopMoviesInterface[] = req.body;
-      const data = (await Promise.all(topMovies.map(async (movie) => {
+      await Promise.all(topMovies.map(async (movie) => {
           const {position, origTitle, polTitle, year, imgOfMovie} = movie;
           const movieFromDB = year && (origTitle || polTitle) ? await TopMovie.checkIfItIsInDataBase(new Date(year), origTitle, polTitle): null;
           if(movieFromDB){
@@ -103,6 +103,7 @@ updateDataBaseRouter
             ******-----------------------******\n\n`, 'utf-8');
           return;
           }
-      }))).filter(movieTitle => movieTitle);
+      }));
+        await TopMovie.setGenresList();
 
   })

@@ -1,7 +1,6 @@
 import {pool} from "../utils/db";
-import {FieldPacket} from "mysql2/promise";
+import {FieldPacket, RowDataPacket} from "mysql2/promise";
 import {v4 as uuid} from 'uuid';
-
 import {ValidationError} from "../utils/errors";
 import {MoviesInDataBase} from "../types";
 
@@ -81,15 +80,39 @@ export class TopMovie implements MoviesInDataBase {
     }
 
     static async updateMoviePosition(id: string, position: number, origTitle: string): Promise<string> {
-        const [results] = await pool.execute('UPDATE `top-movies` SET `position` = :position WHERE `id` = :id', {
+        await pool.execute('UPDATE `top-movies` SET `position` = :position WHERE `id` = :id', {
             position,
             id,
         });
         return origTitle;
     }
 
+    static async setGenresList(){
+        const [results] = await pool.execute('SELECT `genre` FROM `top-movies`') as RowDataPacket[];
+
+        const genreSet: { [key: string]: number } = {};
+        results.map((movie: RowDataPacket)=> movie.genre.split(',').forEach((genre: string) => genreSet[genre.trim()] ?
+          genreSet[genre.trim()]= genreSet[genre.trim()]+1 :
+          genreSet[genre.trim()] = 1));
+        delete genreSet['N/A'];
+        const [dbGenres] =  await pool.execute('SELECT * FROM `movie-stats`') as RowDataPacket[];
+        const genreFromDBNames = dbGenres.map((obj: {id: string, name: string, number: number }) => obj.name);
+        Object.entries(genreSet).map(async ([key, value])=> {
+            genreFromDBNames.includes(key) ?
+            await pool.execute('UPDATE `movie-stats` SET `number` = :number WHERE `name` = :name', {
+                name: key,
+                number: value,
+            }) :
+              await pool.execute('INSERT INTO `movie-stats`  VALUES(:id, :name, :number)', {
+                id: uuid(),
+              name: key,
+              number: value,
+        });
+        })
+    }
+
     async addNewMovieToDataBase(): Promise<string> {
-        const [results] = await pool.execute('INSERT INTO `top-movies` VALUES(:id, :origTitle, :polTitle, :position, :year, :imgOfMovie, :genre, :poster, :actors, :plot, :rated, :director)', {
+        await pool.execute('INSERT INTO `top-movies` VALUES(:id, :origTitle, :polTitle, :position, :year, :imgOfMovie, :genre, :poster, :actors, :plot, :rated, :director)', {
             id: this.id,
             origTitle: this.origTitle,
             polTitle: this.polTitle,
