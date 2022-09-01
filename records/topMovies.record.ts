@@ -2,7 +2,7 @@ import {pool} from "../utils/db";
 import {FieldPacket, RowDataPacket} from "mysql2/promise";
 import {v4 as uuid} from 'uuid';
 import {ValidationError} from "../utils/errors";
-import {GenresStatObject, GenresStatReturn, MoviesInDataBase} from "../types";
+import {GenresStatObject, MoviesInDataBase} from "../types";
 
 
 type TopMovieResults = [TopMovie[], FieldPacket[]];
@@ -110,9 +110,10 @@ export class TopMovie implements MoviesInDataBase {
         });
         })
     }
-    static async getGenresList(): Promise<GenresStatReturn[]>{
-        const [dbGenres] =  await pool.execute('SELECT `name`,`number` FROM `movie-stats` WHERE `number` > 7 ORDER BY `number` DESC') as RowDataPacket[];
-        return dbGenres as GenresStatReturn[];
+    static async getGenresList(): Promise<GenresStatObject>{
+        const [dbGenres] =  (await pool.execute('SELECT `name`,`number` FROM `movie-stats` WHERE `number` > 7 ORDER BY `number` DESC') as RowDataPacket[]);
+        const objOutOfArray = dbGenres.reduce((obj: object, item: {name:string, number:number})=> ({...obj, [item.name]: item.number}), {})
+        return objOutOfArray as GenresStatObject;
     }
     async addNewMovieToDataBase(): Promise<string> {
         await pool.execute('INSERT INTO `top-movies` VALUES(:id, :origTitle, :polTitle, :position, :year, :imgOfMovie, :genre, :poster, :actors, :plot, :rated, :director)', {
