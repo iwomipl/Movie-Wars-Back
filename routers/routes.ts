@@ -5,4 +5,4 @@ import {listOfMoviesRouter} from "./listOfMoviesRouter";
 export const routes = Router();
 
 routes.use('/send-movies-to-database', updateDataBaseRouter);
-routes.use('/get-list', listOfMoviesRouter);
+routes.use('/new-api/get-list', listOfMoviesRouter);

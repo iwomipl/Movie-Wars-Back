@@ -55,7 +55,6 @@ export class MovieResponseToFront implements MoviesInDataBase {
             numberOfMovies,
             genre: `%${genre}%`,
         }) as MovieResults;
-        console.log(results);
         return results.sort(()=> Math.random()-0.5).map(obj => new MovieResponseToFront(obj));
     }
 
