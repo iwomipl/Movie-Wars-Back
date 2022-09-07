@@ -8,7 +8,7 @@ import { handleError, handleFourOhFourError } from './utils/errors';
 const app = express();
 
 app.use(cors({
-    origin: [config.corsOrigin],
+    origin: config.corsOrigin,
 }));
 app.use(express.json());
 app.use(urlencoded({
@@ -25,4 +25,4 @@ app.use(handleFourOhFourError);
 
 app.listen(config.servPort, config.servHost, ()=>{
     console.log(`Listening on http://${config.servHost}:${config.servPort}`);
-})
+});
