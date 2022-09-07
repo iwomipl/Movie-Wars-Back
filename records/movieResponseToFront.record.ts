@@ -50,11 +50,11 @@ export class MovieResponseToFront implements MoviesInDataBase {
     }
 
 
-    static async getMoviesFromDataBaseAndShuffle(numberOfMovies: number): Promise<MovieResponseToFront[]>{
-        const [results] = await pool.execute('SELECT * FROM `top-movies` ORDER BY `position` ASC LIMIT 0, :numberOfMovies', {
+    static async getMoviesFromDataBaseAndShuffle(numberOfMovies: number, genre: string): Promise<MovieResponseToFront[]>{
+        const [results] = await pool.execute('SELECT * FROM `top-movies` WHERE `genre` LIKE :genre ORDER BY `position` ASC LIMIT 0, :numberOfMovies', {
             numberOfMovies,
+            genre: genre === 'Various' ? '%': `%${genre}%`,
         }) as MovieResults;
-
         return results.sort(()=> Math.random()-0.5).map(obj => new MovieResponseToFront(obj));
     }
 
