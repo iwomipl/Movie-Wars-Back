@@ -4,7 +4,7 @@ Here you can wind app on which you can see what is your favourite movie. After i
 # Tech stack
 Backend is built on Express. It communicates with frontend via API. This app also communicates with OMDB API, to get information abut movies. To get updated list of Movies I created Browser snippet, so it can be easily updated if needed. 500 movies is enough to choose from, so update is not first choice feature for the app.    
 
-#----------------WORKING DEMO ------------- Until end of August ----------------
+#----------------WORKING DEMO ------------- Until end of August, maybe a little longer ----------------
 ##[MOVIE WARS](https://iwomi.networkmanager.pl/)
 
 # Installing app
@@ -16,6 +16,7 @@ Backend is built on Express. It communicates with frontend via API. This app als
 * In console run **"npm run start"**
 * If You choose **filled database** you are ready to use app. Get on frontend app, and check what's your favourite movie. 
 * If You choose empty database you need to do one more thing get on this link, and will your database with first 500 best (watch out, it will take 15 seconds to fill the db because of throttling, movies, that could not be stored will ve on file badMovies.txt) movies od all time **http://<yourhost>:3001/send-movies-to-database/updateMovies**
+* Un added movies should be listed in file '.utils/badMovies.txt'
 
 That's it, it should be working fine with frontend app (you need to install it separately).
 
@@ -29,14 +30,42 @@ I might also create a replit working app. The link will be here. Until then, you
 ##[Backend](https://github.com/iwomipl/Movie-Wars-Back)
 
 #Browser Snippet
-
+I have created a Browser snippet to get fresh data with current list of best movies out of a website. Its main goal is to extract the data from HTML. If You want to use it by yourself you need to adjust the code to extract proper variables from website, and change backendAddress domain to the one, you are using . After staring the snippet will connect to this server and update the list of movies in your database.    
 
 #Planned updates
 I want to add another features to frontend app, so backend would have to deal with it, those are:
 * choosing from movies of one director
 * choosing from movies with one actor
 * choosing from movies in range od years
-* choosing from movies of one genre
+* choosing from movies of one genre - this one is already done.
 * choosing from movies of one rating 
 * winning movie screen will show similar movies to the winning one by director or by genre
 
+#Endpoints
+
+## update movies
+```bash
+  @GET
+  '//send-movies-to-database/updateMovies' - update movielist from a file
+  @POST
+  '//send-movies-to-database' - update movies list with a snippet
+```
+`File to update movie from should be a JSON File with array of objects having following structure:
+{
+"position":"number",
+"origTitle":"original title",
+"polTitle":"polish title",
+"year":"number, year of release",
+"imgOfMovie":"url to poster",
+"genres":["array of strings with name of genre"]
+}`
+Name of file and folder in which file is located should be: './utils/topMoviesFromFile.ts'
+Name of variable with array of objects should be: "topMoviesFromFile"
+
+## update movies
+```bash
+  @GET
+  '///get-list' - get list of genres of movies - frontend uses it to know how many movies of each genre are there 
+  @POST
+  '///get-list' - get list of exact number of movies of given genre
+```
