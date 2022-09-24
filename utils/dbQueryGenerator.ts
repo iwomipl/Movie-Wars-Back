@@ -5,12 +5,25 @@ export const genresArray = ['Various','Drama','Action','Crime','Adventure','Come
 
 export const ratingsArray = ['PG','PG-13','R'];
 
-export const dbQueryGenerator = (objectFromFrontend: QueryObjectInterface): QueryObject=>{
+export const dbQueryGenerator = async (objectFromFrontend: QueryObjectInterface): Promise<QueryObject>=>{
   const newQueryBody = new QueryObject(objectFromFrontend);
-
+  await newQueryBody.getNumberOfRecords();
   return newQueryBody;
 }
 
 export const validateYear = (year: number): boolean=> {
   return (year < 1901 || year > Number(new Date().getFullYear()) || !Number.isInteger(year));
+}
+
+export const queryRatingsSwitch = (nameOfGenre: string): string=>{
+
+  switch (nameOfGenre) {
+    case 'PG':
+      return 'PG';
+    case 'PG-13':
+      return 'PG-13';
+    case 'R':
+      return 'R'
+  }
+  return '';
 }
