@@ -40,7 +40,7 @@ export class QueryObject implements QueryObjectInterface {
 
   async getNumberOfRecords(): Promise<void>{
 
-    const [numberOfRecords] = await pool.execute('SELECT COUNT(*) FROM `top-movies` WHERE (`genre` LIKE :genre AND `year`>=:startYear AND `year`<=:endYear AND `Rated`=:rating)', {
+    const [numberOfRecords] = await pool.execute('SELECT COUNT(*) FROM `top-movies` WHERE (`genre` LIKE :genre AND `year`>=:startYear AND `year`<=:endYear AND `Rated` REGEXP :rating)', {
       genre: `%${this.genre}%`,
       startYear: this.startYear,
       endYear: this.endYear,
