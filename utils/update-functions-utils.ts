@@ -53,7 +53,7 @@ export const updateMoviesListInDb = async (topMovies: TopMoviesInterface[] )=>{
         }
 
         /**---------- if above could not be returned add this movie to list of unsuccessful addings ------------*/
-        await addUnsuccessfulMovieAddingToFIle({
+        await addUnsuccessfulMovieAddingToFile({
           origTitle: movie.origTitle,
           polTitle: movie.polTitle,
         } as NotAddedMovie);
@@ -65,7 +65,7 @@ export const updateMoviesListInDb = async (topMovies: TopMoviesInterface[] )=>{
 
 }
 
-const addUnsuccessfulMovieAddingToFIle = async (movieToAddToListOfNotAdded: NotAddedMovie): Promise<void>=> {
+const addUnsuccessfulMovieAddingToFile = async (movieToAddToListOfNotAdded: NotAddedMovie): Promise<void>=> {
 const {origTitle, polTitle} = movieToAddToListOfNotAdded;
   await appendFile(__dirname+ '/badMovies.txt',
     `could not add movie:\n

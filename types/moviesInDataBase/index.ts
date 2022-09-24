@@ -1,1 +1,1 @@
-export * from './moviesInDataBase'
+export * from './MoviesInDataBase'

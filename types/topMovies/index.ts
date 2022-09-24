@@ -1,1 +1,1 @@
-export * from './topMoviesInterface'
+export * from './TopMoviesInterface'
