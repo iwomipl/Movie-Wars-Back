@@ -11,13 +11,8 @@ listOfMoviesRouter
     })
   .post('/get-number', async  (req, res)=>{
       const {genre, rating, startYear, endYear} = req.body;
-      dbQueryGenerator({genre, rating, startYear, endYear})
-      res.json({
-          genre,
-          rating,
-          startYear,
-          endYear,
-      });
+
+      res.json(dbQueryGenerator({genre, rating, startYear, endYear}));
   })
     .post('/get-list', async (req, res) => {
         const {number, genre} = req.body;
