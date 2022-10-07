@@ -5,10 +5,11 @@ export const genresArray = ['Various','Drama','Action','Crime','Adventure','Come
 
 export const ratingsArray = ['PG','PG-13','R','PG-13-BEL','PG-13-ABO','R-EXT'];
 
-export const dbQueryGenerator = async (objectFromFrontend: QueryObjectInterface): Promise<QueryObject>=>{
+export const dbQueryGenerator = async (objectFromFrontend: QueryObjectInterface): Promise<number>=>{
   const newQueryBody = new QueryObject(objectFromFrontend);
-  await newQueryBody.getNumberOfRecords();
-  return newQueryBody;
+  const result = await newQueryBody.getNumberOfRecords();
+
+  return result;
 }
 
 export const validateYear = (year: number): boolean=> {

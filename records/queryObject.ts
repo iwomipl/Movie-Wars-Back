@@ -2,13 +2,19 @@ import {GenresType, QueryObjectInterface, RatingType} from "../types";
 import {ValidationError} from "../utils/errors";
 import {genresArray, queryRatingsSwitch, ratingsArray, validateYear} from "../utils/dbQueryGenerator";
 import {pool} from "../utils/db";
+import {FieldPacket} from "mysql2";
+
+type CountObject = {
+  'COUNT(*)': number;
+};
+
+type ReturnedNumber = [CountObject[], FieldPacket[]]
 
 export class QueryObject implements QueryObjectInterface {
   genre: GenresType;
   rating: RatingType;
   startYear: number;
   endYear: number;
-
 
   constructor(obj: QueryObjectInterface) {
     const {
@@ -38,17 +44,18 @@ export class QueryObject implements QueryObjectInterface {
     this.endYear = Number(endYear);
   }
 
-  async getNumberOfRecords(): Promise<void>{
+  async getNumberOfRecords(): Promise<number>{
 
-    const [numberOfRecords] = await pool.execute('SELECT COUNT(*) FROM `top-movies` WHERE (`genre` LIKE :genre AND `year`>=:startYear AND `year`<=:endYear AND `Rated` REGEXP :rating)', {
-      genre: `%${this.genre}%`,
+    const [[numberOfRecords]] = await pool.execute('SELECT COUNT(*) FROM `top-movies` WHERE (`genre` LIKE :genre AND `year`>=:startYear AND `year`<=:endYear AND `Rated` REGEXP :rating)', {
+      genre: this.genre === 'Various' ? '%': `%${this.genre}%`,
       startYear: this.startYear,
       endYear: this.endYear,
       rating: queryRatingsSwitch(this.rating),
-    });
+    }) as ReturnedNumber;
 
-    return;
+    if (Number.isInteger(numberOfRecords['COUNT(*)'])){
+      return numberOfRecords['COUNT(*)'];
+    }
+    throw new ValidationError(`Something's wrong. result is not an integer.`);
   }
-
-
 }

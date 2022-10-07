@@ -12,7 +12,7 @@ listOfMoviesRouter
   .post('/get-number', async  (req, res)=>{
       const {genre, rating, startYear, endYear} = req.body;
 
-      res.json(dbQueryGenerator({genre, rating, startYear, endYear}));
+      res.json(await dbQueryGenerator({genre, rating, startYear, endYear}));
   })
     .post('/get-list', async (req, res) => {
         const {number, genre} = req.body;
