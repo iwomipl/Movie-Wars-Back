@@ -34,7 +34,7 @@ export class QueryObject implements QueryObjectInterface {
     if (!genresArray.includes(genre)) {
       throw new ValidationError(`Genre of movie is not suitable to our DB. No it's set to ${genre}.`);
     }
-    if (validateYear(startYear) || validateYear(endYear) || startYear > endYear) {
+    if (validateYear(Number(startYear)) || validateYear(Number(endYear)) || Number(startYear) >= Number(endYear)) {
       throw new ValidationError(`"Release from" and "Release to" must be between 1901 and ${new Date().getFullYear()}. "Release from" should be also earlier or equal to "Release to". Now it is set on: year of "Release from": ${startYear}, "Release to": ${endYear}.`);
     }
 
