@@ -115,6 +115,16 @@ export class TopMovie implements MoviesInDataBase {
         const objOutOfArray = dbGenres.reduce((obj: object, item: {name:string, number:number})=> ({...obj, [item.name]: item.number}), {'Various': 256})
         return objOutOfArray as GenresStatObject;
     }
+
+    static async getNumberOfMovies(): Promise<GenresStatObject>{
+
+
+        const [dbGenres] =  (await pool.execute('SELECT `name`,`number` FROM `movie-stats` WHERE `number` > 7 ORDER BY `number` DESC') as RowDataPacket[]);
+        const objOutOfArray = dbGenres.reduce((obj: object, item: {name:string, number:number})=> ({...obj, [item.name]: item.number}), {'Various': 256})
+        return objOutOfArray as GenresStatObject;
+    }
+
+
     async addNewMovieToDataBase(): Promise<string> {
         await pool.execute('INSERT INTO `top-movies` VALUES(:id, :origTitle, :polTitle, :position, :year, :imgOfMovie, :genre, :poster, :actors, :plot, :rated, :director)', {
             id: this.id,
