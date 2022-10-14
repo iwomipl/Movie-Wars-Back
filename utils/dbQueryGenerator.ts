@@ -7,9 +7,8 @@ export const ratingsArray = ['PG','PG-13','R','PG-13 and younger','PG-13 and old
 
 export const dbQueryGenerator = async (objectFromFrontend: QueryObjectInterface): Promise<number>=>{
   const newQueryBody = new QueryObject(objectFromFrontend);
-  const result = await newQueryBody.getNumberOfRecords();
-
-  return result;
+  
+   return await newQueryBody.getNumberOfRecords();
 }
 
 export const validateYear = (year: number): boolean=> {
@@ -30,6 +29,6 @@ export const queryRatingsSwitch = (nameOfGenre: string): any=>{
     case 'R':
       return 'R$';
     case 'All':
-      return '%';
+      return '';
   }
 }
