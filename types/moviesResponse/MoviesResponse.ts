@@ -17,3 +17,8 @@ export interface GenresStatReturn {
 export interface MoviesListResponse {
     listOfMovies: MoviesResponse[];
 }
+
+export interface NotAddedMovie {
+    origTitle: string|undefined;
+    polTitle: string|undefined;
+}
