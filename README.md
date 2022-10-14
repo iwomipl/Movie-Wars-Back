@@ -66,6 +66,7 @@ Name of variable with array of objects should be: "topMoviesFromFile"
 ```bash
   @GET
   '///get-list' - get list of genres of movies - frontend uses it to know how many movies of each genre are there 
+  '/get-number' - get number of mvies that fit to data sent via body
   @POST
   '///get-list' - get list of exact number of movies of given genre
 ```
