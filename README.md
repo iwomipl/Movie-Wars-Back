@@ -35,10 +35,9 @@ I have created a Browser snippet to get fresh data with current list of best mov
 #Planned updates
 I want to add another features to frontend app, so backend would have to deal with it, those are:
 * choosing from movies of one director
-* choosing from movies with one actor
-* choosing from movies in range od years
-* choosing from movies of one genre - this one is already done.
-* choosing from movies of one rating 
+* choosing from movies in range of years they were released - DONE
+* choosing from movies of one genre - DONE
+* choosing from movies of one rating - DONE
 * winning movie screen will show similar movies to the winning one by director or by genre
 
 #Endpoints

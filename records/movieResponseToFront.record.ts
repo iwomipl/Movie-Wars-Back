@@ -1,6 +1,7 @@
 import {pool} from "../utils/db";
 import {FieldPacket} from "mysql2/promise";
-import {MoviesInDataBase} from "../types";
+import {GenresType, MoviesInDataBase, RatingType} from "../types";
+import {queryRatingsSwitch} from "../utils/dbQueryGenerator";
 
 
 type MovieResults = [MoviesInDataBase[], FieldPacket[]];
@@ -50,11 +51,15 @@ export class MovieResponseToFront implements MoviesInDataBase {
     }
 
 
-    static async getMoviesFromDataBaseAndShuffle(numberOfMovies: number, genre: string): Promise<MovieResponseToFront[]>{
-        const [results] = await pool.execute('SELECT * FROM `top-movies` WHERE `genre` LIKE :genre ORDER BY `position` ASC LIMIT 0, :numberOfMovies', {
-            numberOfMovies,
+    static async getMoviesFromDataBaseAndShuffle(numberOfMovies: number, genre: GenresType, startYear: number, endYear: number, rating: RatingType): Promise<MovieResponseToFront[]>{
+        const [results] = await pool.execute('SELECT * FROM `top-movies` WHERE (`genre` LIKE :genre AND `year`>=:startYear AND `year`<=:endYear AND `Rated` REGEXP :rating) ORDER BY `position` ASC LIMIT 0, :numberOfMovies', {
             genre: genre === 'Various' ? '%': `%${genre}%`,
+            startYear: startYear,
+            endYear: endYear,
+            rating: queryRatingsSwitch(rating),
+            numberOfMovies,
         }) as MovieResults;
+
         return results.sort(()=> Math.random()-0.5).map(obj => new MovieResponseToFront(obj));
     }
 

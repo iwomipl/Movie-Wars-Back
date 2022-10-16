@@ -1,7 +1,7 @@
 {
   "name": "movie-wars-back",
   "version": "0.2.1",
-  "description": "",
+  "description": "Backend of app comparing movies",
   "main": "index.js",
   "scripts": {
     "start": "ts-node index.ts",
