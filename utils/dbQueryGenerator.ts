@@ -7,7 +7,7 @@ export const ratingsArray = ['PG','PG-13','R','PG-13 and younger','PG-13 and old
 
 export const dbQueryGenerator = async (objectFromFrontend: QueryObjectInterface): Promise<number>=>{
   const newQueryBody = new QueryObject(objectFromFrontend);
-  
+
    return await newQueryBody.getNumberOfRecords();
 }
 

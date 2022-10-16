@@ -15,8 +15,9 @@ listOfMoviesRouter
       res.json(await dbQueryGenerator({genre, rating, startYear, endYear}));
   })
     .post('/get-list', async (req, res) => {
-        const {number, genre} = req.body;
-        const movieFromMyDB = await MovieResponseToFront.getMoviesFromDataBaseAndShuffle(number, genre);
+        const {number, genre, startYear, endYear, rating} = req.body;
+
+        const movieFromMyDB = await MovieResponseToFront.getMoviesFromDataBaseAndShuffle(Number(number), genre, Number(startYear), Number(endYear), rating);
 
         res.status(200).json(movieFromMyDB);
     })
